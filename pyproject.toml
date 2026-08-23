@@ -5,12 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "qsri"
 version = "2.0.0"
-description = "Quantum Self-Recursive Improvement — amplitude-interference search that tunes a target by measuring it, and tunes its own search by measuring itself"
+description = "Quantum Self-Recursive Improvement — an AI that improves itself recursively: amplitude-interference search (QAIS) improving a target, and meta-recursive ascent (QMRA) improving the improver"
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Brion Quantum AI Team" }]
-keywords = ["quantum", "optimization", "amplitude-encoding", "autotuning",
-            "self-improvement", "qaoa", "qiskit"]
+keywords = ["self-recursive-improvement", "recursive-self-improvement", "asi",
+            "artificial-superintelligence", "quantum", "amplitude-encoding",
+            "qais", "qmra", "self-improvement", "agi", "qiskit"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Scientific/Engineering :: Artificial Intelligence",

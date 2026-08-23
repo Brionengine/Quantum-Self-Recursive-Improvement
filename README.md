@@ -2,19 +2,63 @@
 
 **Brion Quantum AI Team**
 
-A self-improving search that tunes a target by measuring it, and tunes its own
-search by measuring itself.
+**Self-recursive improvement** is the ability of an AI to improve *itself* —
+recursively, repeatedly, as an ability rather than an event. Not a system that is
+tuned, but a system that does the tuning, on itself, and gets better at doing it
+each time round. Every pass improves the improver, so the next pass starts from a
+stronger improver and reaches further. That compounding is the road to **ASI**.
+
+The Brion Quantum AI Team built the original self-recursive improvement
+algorithms. **QSRI is the quantum realization of that work** — the same
+recursion, with the choosing done by complex amplitudes and Born-rule
+measurement on real quantum hardware.
+
+## The recursion
+
+Most "self-improving" systems improve a *target* and stop there. That is one
+level, and it terminates: once the target is optimal, the system has nothing
+left to do. QSRI runs the loop on itself as well.
+
+```
+        ┌──────────────────────────────────────────────┐
+        │  QMRA — improves the improver                │
+        │  measures its own regret, retunes its own    │
+        │  exploration temperature and interference    │
+        └───────────────────┬──────────────────────────┘
+                            │ tunes
+        ┌───────────────────▼──────────────────────────┐
+        │  QAIS — improves the target                  │
+        │  complex amplitudes, Born-rule selection,    │
+        │  phase carrying which settings win TOGETHER  │
+        └───────────────────┬──────────────────────────┘
+                            │ measures
+        ┌───────────────────▼──────────────────────────┐
+        │  Objective — anything that can be measured   │
+        └──────────────────────────────────────────────┘
+```
+
+The second level is the one that matters. **QMRA improves the thing that does the
+improving**, from evidence it gathers about its own performance — no human
+retunes it, and nothing about the loop is fixed in advance. That is the ability,
+and it is what makes the recursion self-sustaining rather than a single pass.
+
+The objective is deliberately pluggable, and that is the point: the loop is not
+*about* any particular target. It is about an intelligence that can measure
+itself against something and close the gap on its own, repeatedly. Point it at a
+different objective and the same recursion runs — nothing in the engine changes.
+
+## What carries it
 
 QSRI carries a **complex amplitude** per configuration value and selects by the
 Born rule, so settings that win *together* rotate into alignment and reinforce;
 settings that lose together cancel. It draws those selections by measuring a
 circuit that **encodes the learned distribution** — on a local simulator or on
-real QPU hardware. And it closes the recursion: the engine measures its own
-regret and retunes its own exploration parameters, improving the thing that does
-the improving.
+real QPU hardware.
 
-Everything is **fail-closed**. A failed build, a failed benchmark, a missing
-verdict or a timeout yields `INVALID` — never a number, never a ranking.
+Everything is **fail-closed**. A failed evaluation, a missing verdict or a
+timeout yields `INVALID` — never a number, never a ranking. A self-improving
+system that cannot tell a real gain from a broken measurement does not improve;
+it drifts, confidently. That is why the refusals come before the numbers.
 
 ---
 
@@ -60,9 +104,11 @@ so exploration and exploitation are one dial, not two code paths.
 
 ### QMRA — Quantum Meta-Recursive Ascent
 
-The recursion proper. QMRA watches what fraction of recent trials came in above
-average and tunes QSRI's **own** temperature and interference strength: thrashing
-raises temperature and softens commitment, a productive slope cools and sharpens.
+**The self-improvement layer** — where the system improves the thing that does
+the improving. QMRA watches what fraction of recent trials came in above average
+and tunes QSRI's **own** temperature and interference strength: thrashing raises
+temperature and softens commitment, a productive slope cools and sharpens. It
+learns how to search from watching itself search, and nobody sets those dials.
 
 Two details that are easy to get wrong, and were:
 
@@ -195,18 +241,26 @@ tests/                 engine, objective and encoding tests
 
 ## Lineage
 
-QSRI is an update of Brion's own earlier self-recursive improvement work. Two
+**The original self-recursive improvement algorithms are the Brion Quantum AI
+Team's own work.** QSRI is not an implementation of someone else's idea — it is
+the next version of ours, rebuilt on quantum foundations. Two of our
 repositories are the direct ancestors:
 
 * **QGACE** — Quantum-Guided Autonomous Code Evolution
   ([`Brion-Quantum-A.I.-General-System`](https://github.com/Brionengine/Brion-Quantum-A.I.-General-System)).
-  Contributes the improvement cycle — analyze, benchmark, transform, test,
-  accept or roll back — with weights that evolve on historical success, atomic
-  rollback and convergence detection. QSRI replaces its quantum selection step,
-  which was measuring noise.
+  The self-improvement cycle itself: analyze, benchmark, transform, test, accept
+  or roll back — with weights that evolve on historical success, atomic rollback
+  and convergence detection. QSRI keeps the cycle and replaces its quantum
+  selection step, which was measuring noise rather than what had been learned.
 * **QDSS** — Quantum Demand Superposition Scaling, the `quantum_auto_scaler`
-  package that ships alongside QSRI here. Contributes modelling a decision space
-  as a superposition and collapsing it by measurement when a choice must be made.
+  package that ships alongside QSRI here. Modelling a decision space as a
+  superposition and collapsing it by measurement when a choice must be made.
+
+What QSRI adds to that inheritance is the **second level**. QGACE improved a
+target and evolved scalar weights while doing it; its loop was fixed. QSRI makes
+the loop itself something the system measures and improves — and replaces scalar
+weights with amplitudes, so the search can represent settings that are only good
+in each other's company.
 
 QSRI is **not** descended from RecursiveSelfRegeneration — that is self-recursive
 self-*healing*, regenerating degraded state, which is a different algorithm.
