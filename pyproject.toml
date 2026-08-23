@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qsri"
+version = "2.0.0"
+description = "Quantum Self-Recursive Improvement — amplitude-interference search that tunes a target by measuring it, and tunes its own search by measuring itself"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Brion Quantum AI Team" }]
+keywords = ["quantum", "optimization", "amplitude-encoding", "autotuning",
+            "self-improvement", "qaoa", "qiskit"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = []          # the engine is pure standard library
+
+[project.optional-dependencies]
+sim = ["qiskit>=1.0", "qiskit-aer>=0.14"]   # amplitude-encoded sampling
+qpu = ["pyqpanda3"]                          # real QPU hardware draws
+test = ["pytest>=7"]
+
+[project.scripts]
+qsri = "qsri.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Brionengine/Quantum-Self-Recursive-Improvement"
+
+[tool.setuptools]
+packages = ["qsri"]

@@ -1,0 +1,29 @@
+{
+  "units": "ops/s",
+  "genome": {
+    "GEMM_LOAD_POLICY":   ["cp_async", "tma"],
+    "GEMM_MANUAL_MMA":    ["", "0", "1"],
+    "GEMM_XOR_ACCUMS":    ["", "4", "8", "16"],
+    "GEMM_SWIZZLE_BITS":  ["", "2", "3"],
+    "GEMM_STAGES":        ["", "2", "3"],
+    "GEMM_KBLOCK":        ["", "64", "128"],
+    "GEMM_MIN_BLOCKS":    ["", "1", "2"]
+  },
+
+  "build": "make -C ./kernel clean >/dev/null 2>&1; {env} make -C ./kernel -j8 2>&1 | tail -25",
+  "bench": "./kernel/bench --iters 8",
+
+  "verdict_regex": "VERDICT:\\s*(\\S+)",
+  "verdict_ok": "OK",
+  "score_regex": "throughput\\s+([0-9.eE+]+)",
+  "higher_is_better": true,
+  "secondary_regex": "kernel_ms\\s+([0-9.]+)",
+
+  "plausible_max": 1.6,
+  "plausible_min_secondary": 0.6,
+
+  "build_timeout": 1500,
+  "bench_timeout": 400,
+  "lock_file": "/tmp/qsri_kernel_build.lock",
+  "workdir": "qsri_work"
+}

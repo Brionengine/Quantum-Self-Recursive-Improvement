@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# QSRI run artifacts
+qsri_work/
+qsri_ledger.json
+qsri_ledger.json.tmp
+*.buildlog
+
+# Credentials — never commit a QPU key
+origin.key
+*.key

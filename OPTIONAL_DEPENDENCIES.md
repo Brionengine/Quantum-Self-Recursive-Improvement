@@ -74,3 +74,22 @@ execute dependency-requiring code at import time — most often a class that
 inherits from `torch.nn.Module`, since a base class is evaluated when the class
 statement runs and cannot be deferred. These raise a clear error naming the
 missing package. Everything else in the repository imports without it.
+
+## QSRI specifically
+
+The `qsri` package is **pure standard library**. Its optional extras only widen
+how a configuration is drawn, and each degrades to the next without failing:
+
+| Extra | Package | Enables | Without it |
+|---|---|---|---|
+| `sim` | `qiskit`, `qiskit-aer` | amplitude-encoded sampling on a simulator | classical weighted sampling |
+| `qpu` | `pyqpanda3` | whole-genome draws on real QPU hardware | falls back to the simulator |
+| `test` | `pytest` | the test suite | — |
+
+```bash
+pip install -e ".[sim,test]"
+```
+
+The fallback chain is deliberate and fail-closed: QPU → simulator → classical.
+A sampler that cannot produce a trustworthy draw returns `None` and the next
+backend takes over. None of them is ever allowed to fabricate a configuration.
