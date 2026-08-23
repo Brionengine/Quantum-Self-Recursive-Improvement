@@ -1,4 +1,4 @@
-# Quantum Auto-Scaling System
+# Quantum Self-Recursive Improvement (QSRI) Entanglement Auto-Scaling System
 
 **Brion Quantum - Quantum-Enhanced Autonomous Auto-Scaling System v1.0**
 
